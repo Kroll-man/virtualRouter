@@ -67,7 +67,7 @@ public class Router {
     /* Private methods */
 
     private Table splitHorizon(int destinationRouterId) {
-	//TODO: implement the split horizaon rule technique, as follows:
+	//TODO: implement the split horizon rule technique, as follows:
 	//      before sending the distance vector to a neighbor,
 	//      remove all the entries for which the neighbor is used as the next hop
 	//      (Note that you should first replicate the distance vector, then perform
@@ -87,7 +87,7 @@ public class Router {
 
     }
 
-    private void initializeTable(List<Link> links) {
+    private void initializeTable() {
 	//TODO: complete this method to initialize the distance vector: _table
         // use JSONTool to get links
         List<Link> links = _jsonTool.getLinks();

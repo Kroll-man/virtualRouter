@@ -60,7 +60,9 @@ public class Router {
     public void runRouter() throws Exception{
         while (true) {
 	    //TODO: implement the distance vector routing protocol
-
+            DatagramPacket incoming =
+                    new DatagramPacket(new byte[1024], 1024);
+            Table received = receiveTable(incoming);
         }
     }
 
@@ -87,27 +89,32 @@ public class Router {
 
     }
 
-    private void initializeTable() {
+    private void initializeTable(List<Link> links) {
 	//TODO: complete this method to initialize the distance vector: _table
         // use JSONTool to get links
-        List<Link> links = _jsonTool.getLinks();
+        //List<Link> links = _jsonTool.getLinks();
         //loop though each link
         for(Link link: links){
             //Find out ID of neighbor using the link
             int otherRouterId =  link.connectingRouterId().get(0) == _Id ? link.connectingRouterId().get(1) : link.connectingRouterId().get(0);
             //add it to the routing table, represented here by member variable _table
-            _table.addEntry(otherRouterId, new RouteRecord(link.weight(), otherRouterId));
+            _table.addEntry( new RouteRecord(otherRouterId,link.weight(), otherRouterId));
         }
         // add entry for self, equal to 0
-        _table.addEntry(_Id, new RouteRecord(0, _Id));
-        //print it to console to show intitial table with direct links
+        _table.addEntry(new RouteRecord(_Id,0,0));
+        //print it to console to show initial table with direct links
         System.out.println("Initial direct link table");
         System.out.println(_table);
     }
 
     private void initializeNeighbors(List<Link> links) {
 	//TODO: complete this method by populating the neighbor list: _neighborIds
-
+        for(Link link: links){
+            //Find out ID of neighbor using the link
+            int otherRouterId =  link.connectingRouterId().get(0) == _Id ? link.connectingRouterId().get(1) : link.connectingRouterId().get(0);
+            //add it to the routing table, represented here by member variable _table
+            _neighborIds.add(otherRouterId);
+        }
     }
 
     /* BELOW METHOD SHOULD NOT NEED CHANGED */

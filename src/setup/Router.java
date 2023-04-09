@@ -62,6 +62,7 @@ public class Router {
 	    //TODO: implement the distance vector routing protocol
             DatagramPacket incoming =
                     new DatagramPacket(new byte[1024], 1024);
+            _datagramSocket.receive(incoming);
             Table received = receiveTable(incoming);
         }
     }
@@ -85,8 +86,27 @@ public class Router {
 	// at least one entry of the router's own distance vector has been optimized.)
 	// Otherwise, if the router's own distance vector remains unchanged after the optimization attempt,
 	// this method should return false.
-	
+        //get info about sender from table
+        RouteRecord SenderSelfEntry = incomingTable.getSelfEntry();
+        int distFromSender = (_table.getEntryByDest(SenderSelfEntry.getDest())).getCost();
+        List<RouteRecord> inArray = incomingTable.getRecords();
+        boolean successful = false;
 
+        //start looking for optimizations
+        for(RouteRecord record : inArray){
+            RouteRecord currentRecord = _table.getEntryByDest(record.getDest());
+            //check if a record with that destination is found, if not, new destination found
+            if (currentRecord == null){
+                _table.addEntry(new RouteRecord(record.getDest(),record.getCost()+distFromSender, SenderSelfEntry.getDest()));
+                successful = true;
+            } else if(record.getCost()+distFromSender < currentRecord.getCost()){ //check if incoming table has lower cost route
+                currentRecord.setCost(record.getCost()+distFromSender);
+                currentRecord.setNextHop(SenderSelfEntry.getDest());
+                successful = true;
+            }
+
+        }
+        return successful;
     }
 
     private void initializeTable(List<Link> links) {
@@ -112,7 +132,7 @@ public class Router {
         for(Link link: links){
             //Find out ID of neighbor using the link
             int otherRouterId =  link.connectingRouterId().get(0) == _Id ? link.connectingRouterId().get(1) : link.connectingRouterId().get(0);
-            //add it to the routing table, represented here by member variable _table
+            //add it to the list of neighbor Ids
             _neighborIds.add(otherRouterId);
         }
     }

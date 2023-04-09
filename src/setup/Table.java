@@ -2,6 +2,7 @@ package setup;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -9,6 +10,11 @@ import java.util.List;
 public class Table implements Serializable {
  //TODO: add any member variables and member methods.
     private List<RouteRecord> records;
+
+    public Table() {
+        records = new ArrayList<RouteRecord>();
+    }
+
 
     @Override
     public String toString() {
@@ -22,6 +28,24 @@ public class Table implements Serializable {
 
     public void addEntry(RouteRecord record){
         records.add(record);
+    }
+
+    public RouteRecord getEntryByDest(int destId){
+        for(RouteRecord record : records){
+            if(destId == record.getDest()){
+                return record;
+            }
+        }
+        return null;
+    }
+    public RouteRecord getSelfEntry(){
+        RouteRecord SelfEntry = null;
+        for(RouteRecord record : records){
+            if(record.getCost()==0){
+                SelfEntry=record;
+            }
+        }
+        return SelfEntry;
     }
 
     public List<RouteRecord> getRecords() {

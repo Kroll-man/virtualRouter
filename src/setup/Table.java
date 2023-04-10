@@ -20,6 +20,8 @@ public class Table implements Serializable {
     }
 
 
+
+
     @Override
     public String toString() {
         //TODO: you must complete the toString() method to print out the content of the distance vector

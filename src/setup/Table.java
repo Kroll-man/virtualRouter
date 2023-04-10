@@ -15,6 +15,10 @@ public class Table implements Serializable {
         records = new ArrayList<RouteRecord>();
     }
 
+    public Table(Table tab){
+        records = new ArrayList<RouteRecord>(tab.getRecords());
+    }
+
 
     @Override
     public String toString() {
@@ -29,6 +33,8 @@ public class Table implements Serializable {
     public void addEntry(RouteRecord record){
         records.add(record);
     }
+
+    public void removeEntry(RouteRecord record){records.remove(record);}
 
     public RouteRecord getEntryByDest(int destId){
         for(RouteRecord record : records){

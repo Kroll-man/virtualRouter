@@ -61,9 +61,13 @@ public class Router {
         while (true) {
 	    //TODO: implement the distance vector routing protocol
             DatagramPacket incoming =
-                    new DatagramPacket(new byte[1024], 1024);
+                    new DatagramPacket(new byte[COMM_BYTE_SIZE], COMM_BYTE_SIZE);
             _datagramSocket.receive(incoming);
             Table received = receiveTable(incoming);
+            boolean optimized = optimizeTable(received);
+            if (optimized == true){
+
+            }
         }
     }
 

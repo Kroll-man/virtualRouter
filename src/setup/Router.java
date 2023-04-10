@@ -70,14 +70,15 @@ public class Router {
     /* Private methods */
 
     private Table splitHorizon(int destinationRouterId) {
-	//TODO: implement the split horizon rule technique, as follows:
-	//      before sending the distance vector to a neighbor,
-	//      remove all the entries for which the neighbor is used as the next hop
-	//      (Note that you should first replicate the distance vector, then perform
-	//       the removals on the copy, and then return the pruned copy.)
-
-
-
+        Table tableCopy = new Table(_table);
+        List<RouteRecord> listCopy = tableCopy.getRecords();
+        Iterator<RouteRecord> routerItem = listCopy.iterator();
+        while(routerItem.hasNext()) {
+            if (routerItem.next().getNextHop() == destinationRouterId) {
+                routerItem.remove();
+            }
+        }
+        return tableCopy;
     }
 
     // This method is called whenever a distance vector is received from a neighbor.

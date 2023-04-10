@@ -66,6 +66,13 @@ public class Router {
             Table received = receiveTable(incoming);
             boolean optimized = optimizeTable(received);
             if (optimized == true){
+                for(int id : _neighborIds){
+                    InetAddress neighborIp = _jsonTool.getIPById(id);
+                    int neighborPort = _jsonTool.getPortById(id);
+                    Table trimmedTable = splitHorizon(id);
+
+                    sendTable(neighborIp, neighborPort, trimmedTable);
+                }
 
             }
         }
